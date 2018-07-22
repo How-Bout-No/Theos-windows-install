@@ -1,5 +1,3 @@
-(NOTE: WHEN YOU SEE THE THINGS IN "" THAT IS WHAT YOU PUT INTO YOUR TERMINAL. LEAVE OUT THE "" AND ONLY PUT WHAT IS IN THE MIDDLE INTO THE TERMINAL)
-
 GUIDE:
 
 1. First of all you will need the latest Windows update, so before proceeding, check for Windows updates and make sure your Windows 10 is up to date. This tutorial only works on Windows 10.
@@ -8,7 +6,8 @@ GUIDE:
 
 3. Inside Windows PowerShell, run this command to enable WSL on your system. This is harmless and won't do anything abnormal to your PC.
 
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+`Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux`
+
 4. Reboot your PC after entering the command. Then open the Microsoft Store app and install the Ubuntu app on your Windows.
 
 5. Once the download has completed, select "Launch" from the Microsoft Store page and wait for the terminal Window to do it's thing.
@@ -21,48 +20,57 @@ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-L
 
 Installing dependencies:
 
-"sudo apt-get update"
-"sudo apt-get install -y build-essential git unzip libio-compress-perl"
+```
+sudo apt-get update
+sudo apt-get install -y build-essential git unzip libio-compress-perl
+```
 
 Setting the $THEOS variable:
 
-"echo export THEOS="/opt/theos" >> ~/.bashrc"
-"echo export PATH="\$THEOS/bin:\$PATH" >> ~/.bashrc"
-"echo alias theos="\$THEOS/bin/nic.pl" >> ~/.bashrc"
-"echo "umask 0022" >> ~/.bashrc"
-"source ~/.bashrc"
+```
+echo export THEOS="/opt/theos" >> ~/.bashrc
+echo export PATH="\$THEOS/bin:\$PATH" >> ~/.bashrc
+echo alias theos="\$THEOS/bin/nic.pl" >> ~/.bashrc
+echo "umask 0022" >> ~/.bashrc
+source ~/.bashrc
+```
 
 Installing Theos, Toolchain & SDK:
 I'm installing theos in /opt because I like it there but you can change directories to anywhere you like.
 
-"sudo git clone --recursive git://github.com/theos/theos.git $THEOS"
-"cd $THEOS/toolchain && sudo wget https://developer.angelxwind.net/Linux/ios-toolchain_clang%2bllvm%2bld64_latest_linux_x86_64.zip -O LinuxToolchain.zip"
-"sudo unzip LinuxToolchain.zip && sudo rm -f LinuxToolchain.zip"
-"sudo rm -rf $THEOS/sdks/ && sudo git clone https://github.com/theos/sdks $THEOS/sdks"
+```
+sudo git clone --recursive git://github.com/theos/theos.git $THEOS
+cd $THEOS/toolchain && sudo wget https://developer.angelxwind.net/Linux/ios-toolchain_clang%2bllvm%2bld64_latest_linux_x86_64.zip -O LinuxToolchain.zip
+sudo unzip LinuxToolchain.zip && sudo rm -f LinuxToolchain.zip
+sudo rm -rf $THEOS/sdks/ && sudo git clone https://github.com/theos/sdks $THEOS/sdks
+```
  
 
 Installing newer libstdc++:
 
-"cd /tmp && wget http://mirrors.kernel.org/ubuntu/pool/main/g/gcc-5/libstdc++6_5.4.0-6ubuntu1~16.04.9_amd64.deb -O libstdc++.deb"
-"dpkg-deb -x libstdc++.deb libstdc++"
-"cp libstdc++/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21 /usr/lib/x86_64-linux-gnu/"
-"cd /usr/lib/x86_64-linux-gnu/"
-"ln -sf libstdc++.so.6.0.21 libstdc++.so.6"
+```
+cd /tmp && wget http://security.ubuntu.com/ubuntu/pool/main/g/gcc-5/libstdc++6_5.4.0-6ubuntu1~16.04.10_amd64.deb -O libstdc++.deb
+dpkg-deb -x libstdc++.deb libstdc++
+cp libstdc++/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21 /usr/lib/x86_64-linux-gnu/
+cd /usr/lib/x86_64-linux-gnu/
+ln -sf libstdc++.so.6.0.21 libstdc++.so.6
+```
 
 Fixing fakeroot problem & possible future permission errors:
 
-"sudo sed -i 's/\$(FAKEROOT) -r/fakeroot-tcp/g'  $THEOS/makefiles/package/deb.mk"
-
-"sudo chown -R $(id -u):$(id -g) $THEOS"
+```
+sudo sed -i 's/\$(FAKEROOT) -r/fakeroot-tcp/g'  $THEOS/makefiles/package/deb.mk
+sudo chown -R $(id -u):$(id -g) $THEOS
+```
  
 
 And you're done! Theos is officially installed and ready to run. CD into the folder where you want your projects to be stored and run:
 
-"$THEOS/bin/nic.pl"
+`$THEOS/bin/nic.pl`
 
 or
 
-"theos"
+`theos`
  
 
 Other notes:
